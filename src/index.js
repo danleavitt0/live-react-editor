@@ -1,17 +1,30 @@
-var React = require('react')
-var AceEditor = require('react-ace')
-require('brace/mode/java')
-require('brace/theme/github')
+import React from 'react'
+import AceEditor from 'react-ace'
+import $ from 'jquery'
+var Babel = require('babel')
+require('brace/mode/jsx')
+require('brace/theme/monokai')
 
-function onChange (newValue) {
-  console.log('change', newValue)
+class Home extends React.Component {
+  render () {
+    return(
+      <div>
+        <button onClick={this._save.bind(this)}> save </button>
+        <AceEditor
+          mode="jsx"
+          theme="monokai"
+          name="UNIQUE_ID_OF_DIV"
+          ref="editor"
+        />
+      </div>
+    )
+  }
+  _save () {
+    var value = this.refs.editor.editor.getValue()
+    var transformed = Babel.transform(value).code
+  }
 }
-React.render(
-  <AceEditor
-    mode="java"
-    theme="github"
-    onChange={onChange}
-    name="UNIQUE_ID_OF_DIV"
-  />,
-  document.getElementById('example')
-);
+console.log('hello')
+$(document).ready(function(){
+  React.render(<Home />, document.getElementById('container'))
+})
